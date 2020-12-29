@@ -107,8 +107,7 @@ function ListaItem (props) {
           }
       };
       fetch(url, params);
-      //alert(chave + "  teste");
-      navigation.navigate('Delete');
+      
   }
 
 

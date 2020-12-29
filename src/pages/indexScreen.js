@@ -82,9 +82,9 @@ const QuadradoDoItem = styled.View `
   height: 40px;
   display:flex;
   justify-content:center;
-  align-items:center;
   margin-bottom:50px;
 `;
+
 const LinhaDeCimaQuadradoDoItem = styled.View `
   width:100%;
   height: 1px;
@@ -102,6 +102,7 @@ const Item = styled.View `
   width: 90%;
   height:64px;
   
+  
 `;
 
 const QuadradoInternoDoitem = styled.View `
@@ -118,9 +119,9 @@ const QuadradoInternoDoTextoDoItem = styled.View `
   
   display: flex;
   flex-direction:row;
-  justify-content:space-around;
+  padding-left: 20px;
   align-items:center;
-  flex:2;
+  flex:3;
   
 `;
 
@@ -128,14 +129,14 @@ const TextoDoItem = styled.Text`
   
 `;
 
-const BtnEditarItem = styled.View`
+const BtnEditarItem = styled.TouchableHighlight`
   height:50px;
   width:50px;
   justify-content:center;
   align-items:center;
 `;
 
-const BtnExcluirItem = styled.View`
+const BtnExcluirItem = styled.TouchableHighlight`
 height:50px;
 width:50px;
 justify-content:center;
@@ -143,6 +144,7 @@ align-items:center;
 `;
 
 const Listagem = styled.FlatList``;
+
 
 function IndexScreen (props) {
     var chave;
@@ -160,6 +162,7 @@ function IndexScreen (props) {
       if(chave == null || chave == ""){
           navigation.navigate('Login');
       }
+      //alert("chave do verificarSeEstalogado: "+chave);
       getAll();
     }
 
@@ -187,11 +190,35 @@ function IndexScreen (props) {
             .then((json)=>{
               
               if(json){
+                
                 setTarefas(json);
-                console.log(tarefas);
+                //console.log(tarefas);
               }
             }
         );
+    }
+
+    const deletar = (item) =>
+    {
+        verificarSeEstaLogado();
+        const url = 'http://10.0.2.2:54366/api/todo/'+item.id;
+        console.log(url);
+        const params = 
+        {
+            method:'DELETE',
+            headers:
+            {
+                Accept:'application/json',
+                'Content-Type':'application/json',
+                chave: "c9cb756c64d5664cb899857fe4abacb1"
+            }
+        };
+        fetch(url, params);
+        //alert("chave do deletar: "+chave);
+        var PosicaoParaExcluir = tarefas.indexOf(item);
+        tarefas.splice(parseInt(PosicaoParaExcluir),1);
+        console.log("PosicaoParaExcluir: "+PosicaoParaExcluir);
+        console.log(tarefas);
     }
 
    return (
@@ -212,7 +239,33 @@ function IndexScreen (props) {
               
               <Listagem
                 data={tarefas}
-                renderItem={({item})=><ListaItem data={item}/>}
+                renderItem={({item})=>
+                <QuadradoDoItem>
+                <LinhaDeCimaQuadradoDoItem />
+                <Item >
+                  <QuadradoInternoDoTextoDoItem>
+                    <TextoDoItem>
+                      {item.nome}
+                    </TextoDoItem>
+                  </QuadradoInternoDoTextoDoItem>
+
+                    <QuadradoInternoDoitem>
+                        <BtnEditarItem onPress={()=>alert(item.id)}>
+                        <Image 
+                          source={require('../img/editar.png')}
+                        />
+                        </BtnEditarItem>
+
+                        <BtnExcluirItem onPress={()=>deletar(item)}>
+                        <Image 
+                          source={require('../img/excluir.png')}
+                        />
+                        </BtnExcluirItem>
+
+                    </QuadradoInternoDoitem>
+                </Item>
+              </QuadradoDoItem>
+                }
                 keyExtractor={(item)=>item.id.toString()}              
               />
 
