@@ -11,11 +11,6 @@ import {
 import styled from 'styled-components/native';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from "@react-native-community/async-storage";
-import ListaItem from "../components/ListaItem";
-
-import lista from "../dados/lista";
-import { cos } from 'react-native-reanimated';
-
 
 const Pagina = styled.SafeAreaView `
   flex:1;
@@ -148,7 +143,7 @@ const Listagem = styled.FlatList``;
 
 function IndexScreen (props) {
     var chave;
-
+    
     const [tarefas, setTarefas] = useState([]);
 
     useEffect(()=>{
@@ -210,16 +205,18 @@ function IndexScreen (props) {
             {
                 Accept:'application/json',
                 'Content-Type':'application/json',
-                chave: "c9cb756c64d5664cb899857fe4abacb1"
+                chave: "aa4c03138570ee69dfd0102dee7221e5" //capturar a chave do usuário logado
             }
         };
         fetch(url, params);
         //alert("chave do deletar: "+chave);
-        var PosicaoParaExcluir = tarefas.indexOf(item);
-        tarefas.splice(parseInt(PosicaoParaExcluir),1);
-        console.log("PosicaoParaExcluir: "+PosicaoParaExcluir);
-        console.log(tarefas);
+        //var PosicaoParaExcluir = tarefas.indexOf(item);
+        //tarefas.splice(parseInt(PosicaoParaExcluir),1);
+        //console.log("PosicaoParaExcluir: "+PosicaoParaExcluir);
+        //console.log(tarefas);
+        setTarefas(tarefas);
     }
+
 
    return (
         <Pagina >
@@ -269,7 +266,7 @@ function IndexScreen (props) {
                 keyExtractor={(item)=>item.id.toString()}              
               />
 
-              <Button title="Quantidade de itens?" onPress={()=>{alert(tarefas.length)}} />
+              <Button title="Quantidade de itens?" onPress={()=>{alert(tarefas)}} />
               
           </Body>
         </Pagina>
